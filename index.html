@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+
+<head>
+  <!-- India State Map  -->
+  <title>India Map</title>
+
+  <!--  Styles  -->
+  <!-- <link type="text/css" rel="stylesheet" href="zcolorbrewer.css" /> -->
+  <style type="text/css">
+   svg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.country {
+  fill: #ccc;
+  stroke: #999;
+}
+
+  </style>
+</head>
+
+<body>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+
+  <script type="text/javascript" src="d3.geo.min.js"></script>
+  <script type="text/javascript">
+    const width = 900;
+    const height = 600;
+
+    const svg = d3.select('body').append('svg').attr('width', width).attr('height', height);
+
+    var proj = d3.geo.mercator();
+    var path = d3.geo.path().projection(proj);
+    // const projection = d3.geoMercator().scale(140).translate([width / 2, height / 1.4]);
+    // const path = d3.geoPath(projection);
+
+    var t = proj.translate(); // the projection's default translation
+    var s = proj.scale() // the projection's default scale
+
+    var buckets = 9,
+      colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"]; // alternatively colorbrewer.YlGnBu[9]
+
+    const g = svg.append('g');
+
+    d3.json("countries.json")
+    .then(data => {
+        const countries = topojson.feature(data, data.objects.countries);
+        g.selectAll('path').data(countries.features).enter().append('path').attr('class', 'country').attr('d', path);
+    });
+
+    console.log("svg",svg)
+  </script>
+</body>
+
+</body>
+
+</html>
